@@ -1,66 +1,22 @@
-import Square from "./Square";
+import Square from './Square';
 
+// Props model for board
 type BoardProps = {
-  xIsNext: boolean;
+  // Current gameboard squares
   squares: (string | null)[];
-  onPlay: () => void;
+  // Callback function to handle play events
+  onPlay: (index: number) => void;
 };
 
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6],
-  ];
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i];
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a];
-    }
+export default function Board({ squares, onPlay }: BoardProps) {
+  // Handle click events on gamboard squares
+  function handleClick(index: number) {
+    // Call the callback function
+    onPlay(index);
   }
-  return null;
-}
-
-export default function Board({ xIsNext, squares, onPlay }: BoardProps) {
-  function handleClick(i) {
-    if (calculateWinner(squares) || squares[i]) {
-      return;
-    }
-    const nextSquares = squares.slice();
-    if (xIsNext) {
-      nextSquares[i] = "X";
-    } else {
-      nextSquares[i] = "O";
-    }
-    onPlay(nextSquares);
-  }
-
-  const winner = calculateWinner(squares);
-  const status = winner
-    ? `Winner: ${winner}`
-    : `Next player: ${xIsNext ? "X" : "O"}`;
 
   return (
     <>
-      {winner && (
-        <div
-          className={`alert ${
-            winner === "X" ? "alert-success" : "alert-info"
-          } shadow-lg mb-4`}
-        >
-          <div>
-            <span className="text-lg font-bold">
-              {winner === "X" ? "🎉 X is the Winner!" : "🎉 O is the Winner!"}
-            </span>
-          </div>
-        </div>
-      )}
-      <div className="text-xl font-bold mb-4">{status}</div>
       <div className="grid grid-cols-3 gap-2">
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
         <Square value={squares[1]} onSquareClick={() => handleClick(1)} />

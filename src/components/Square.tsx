@@ -1,5 +1,8 @@
+// Props model for square component
 type SquareProps = {
+  // Squares value X/O or empty
   value: string | null;
+  // Callback function to handle game moves
   onSquareClick: () => void;
 };
 
